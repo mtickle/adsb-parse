@@ -1,11 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"os"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 type Response struct {
@@ -61,14 +66,21 @@ type Response struct {
 
 func main() {
 
+	//--- Load up environment variables
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found")
+	}
+	fxApiKey := os.Getenv("FX_API_KEY")
+
 	//-----------------------------------------------------------------------
 	//--- Set the data url
-	pxSourceUrl := "http://192.168.86.58/adsbx/data/aircraft.json"
+	fxSourceUrl := os.Getenv("FX_SOURCE_URL")
+	fxApiUrl := os.Getenv("FX_API_URL")
 	//-----------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------
 	//--- Load data from the API
-	resp, err := http.Get(pxSourceUrl)
+	resp, err := http.Get(fxSourceUrl)
 	body, err := io.ReadAll(resp.Body)
 
 	if err != nil {
@@ -154,11 +166,33 @@ func main() {
 		sb.WriteString("\"tisb\": \"" + fmt.Sprintf("%g", tisb) + "\", ")
 		sb.WriteString("\"messages\": \"" + fmt.Sprintf("%d", messages) + "\", ")
 		sb.WriteString("\"seen\": \"" + fmt.Sprintf("%g", seen) + "\", ")
-		sb.WriteString("\"rssi\": \"" + fmt.Sprintf("%g", rssi) + "\", ")
+		sb.WriteString("\"rssi\": \"" + fmt.Sprintf("%g", rssi) + "\"")
 		sb.WriteString("}")
 
+		//--- Just hold this here
 		temp := sb.String()
-		fmt.Println(temp)
+		jsonBody := []byte(temp)
+		apiPayload := bytes.NewReader(jsonBody)
 
+		//fmt.Println(temp)
+
+		//--- Send the request downrange to the API URL
+		req, err := http.NewRequest(http.MethodPost, fxApiUrl, apiPayload)
+		if err != nil {
+			panic(err)
+		}
+		req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+		req.Header.Set("x-api-key", fxApiKey)
+
+		client := &http.Client{}
+		response, error := client.Do(req)
+		//fmt.Println(response)
+		if error != nil {
+			panic(error)
+		}
+		defer response.Body.Close()
+
+		//--- Logging
+		fmt.Println("\"hex\": \""+hex+"\" -  API response:", response.Status)
 	}
 }

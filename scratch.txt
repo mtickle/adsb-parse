@@ -1,0 +1,19 @@
+  hex: 1,  ttype:  1,  flight: 1,  alt_baro:1,  alt_geom: 1,  gs: 1,  track: 1,  baro_rate: 1,  squawk: 1,  emergency: 1,  category: 1,  lat: 1,  lon: 1,  nic: 1,  rc: 1,  seen_pos: 1,  r_dst: 1,  r_dir: 1,  version: 1,  nic_baro: 1,  nac_p: 1,  nac_v: 1,  sil: 1,  sil_type: 1,  gva: 1,  sda: 1,  alert: 1,  spi: 1,  mlat: 1,  tisb:1,  messages: 1,  seen:1,  rssi: 1,
+  
+
+
+  {required: false,type: String},
+  
+  
+  firstName: req.body.firstName,
+  lastName: req.body.lastName,
+  height: req.body.height,
+  weight: req.body.weight,
+  hair: req.body.hair,
+  eye: req.body.eye,
+  dob: req.body.dob,
+  sex: req.body.sex,
+  race: req.body.race,
+  dateArr: req.body.dateArr,
+  timeArr: req.body.timeArr,
+  charge: req.body.charge
