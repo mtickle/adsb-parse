@@ -97,18 +97,17 @@ func main() {
 	//-----------------------------------------------------------------------
 	//--- Start iterating through the records
 	for _, rec := range apiResult.Aircraft {
-
-		hex := rec.Hex
-		ttype := rec.Type
-		flight := rec.Flight
+		hex := strings.TrimSpace(rec.Hex)
+		ttype := strings.TrimSpace(rec.Type)
+		flight := strings.TrimSpace(rec.Flight)
 		alt_baro := rec.AltBaro
 		alt_geom := rec.AltGeom
 		gs := rec.Gs
 		track := rec.Track
 		baro_rate := rec.BaroRate
-		squawk := rec.Squawk
-		emergency := rec.Emergency
-		category := rec.Category
+		squawk := strings.TrimSpace(rec.Squawk)
+		emergency := strings.TrimSpace(rec.Emergency)
+		category := strings.TrimSpace(rec.Category)
 		lat := rec.Lat
 		lon := rec.Lon
 		nic := rec.Nic
@@ -121,7 +120,7 @@ func main() {
 		nac_p := rec.NacP
 		nac_v := rec.NacV
 		sil := rec.Sil
-		sil_type := rec.SilType
+		sil_type := strings.TrimSpace(rec.SilType)
 		gva := rec.Gva
 		sda := rec.Sda
 		alert := rec.Alert
@@ -174,7 +173,7 @@ func main() {
 		jsonBody := []byte(temp)
 		apiPayload := bytes.NewReader(jsonBody)
 
-		//fmt.Println(temp)
+		fmt.Println(temp)
 
 		//--- Send the request downrange to the API URL
 		req, err := http.NewRequest(http.MethodPost, fxApiUrl, apiPayload)
