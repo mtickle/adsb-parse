@@ -97,7 +97,7 @@ func main() {
 	//-----------------------------------------------------------------------
 	//--- Start iterating through the records
 	for _, rec := range apiResult.Aircraft {
-		hex := strings.TrimSpace(rec.Hex)
+		hex := strings.ToUpper(strings.TrimSpace(rec.Hex))
 		ttype := strings.TrimSpace(rec.Type)
 		flight := strings.TrimSpace(rec.Flight)
 		alt_baro := rec.AltBaro
@@ -173,7 +173,7 @@ func main() {
 		jsonBody := []byte(temp)
 		apiPayload := bytes.NewReader(jsonBody)
 
-		fmt.Println(temp)
+		//fmt.Println(temp)
 
 		//--- Send the request downrange to the API URL
 		req, err := http.NewRequest(http.MethodPost, fxApiUrl, apiPayload)
