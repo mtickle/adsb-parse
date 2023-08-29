@@ -82,21 +82,19 @@ func main() {
 	//--- Load data from the API
 	resp, err := http.Get(fxSourceUrl)
 	body, err := io.ReadAll(resp.Body)
-
 	if err != nil {
 		fmt.Println("No response from request")
 	}
-
-	//--- Unmarshal the JSON into the "result" value
 	var apiResult Response
 	if err := json.Unmarshal(body, &apiResult); err != nil { // Parse []byte to the go struct pointer
 		fmt.Println("Can not unmarshal JSON")
 	}
-
 	//-----------------------------------------------------------------------
+
 	//-----------------------------------------------------------------------
 	//--- Start iterating through the records
 	for _, rec := range apiResult.Aircraft {
+
 		hex := strings.ToUpper(strings.TrimSpace(rec.Hex))
 		ttype := strings.TrimSpace(rec.Type)
 		flight := strings.TrimSpace(rec.Flight)
@@ -133,7 +131,7 @@ func main() {
 
 		var sb strings.Builder
 		sb.WriteString("{")
-		sb.WriteString("\"hex\": \"" + hex + "\", ")
+		sb.WriteString("\"hex\": \"" + strings.ToUpper(hex) + "\", ")
 		sb.WriteString("\"ttype\": \"" + ttype + "\", ")
 		sb.WriteString("\"flight\": \"" + flight + "\", ")
 		sb.WriteString("\"alt_baro\": \"" + fmt.Sprintf("%d", alt_baro) + "\", ")
