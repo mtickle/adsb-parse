@@ -131,7 +131,7 @@ func main() {
 
 		var sb strings.Builder
 		sb.WriteString("{")
-		sb.WriteString("\"hex\": \"" + strings.ToUpper(hex) + "\", ")
+		sb.WriteString("\"hex\": \"" + hex + "\", ")
 		sb.WriteString("\"ttype\": \"" + ttype + "\", ")
 		sb.WriteString("\"flight\": \"" + flight + "\", ")
 		sb.WriteString("\"alt_baro\": \"" + fmt.Sprintf("%d", alt_baro) + "\", ")
