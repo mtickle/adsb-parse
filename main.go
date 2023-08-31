@@ -153,13 +153,6 @@ func main() {
 		seen := rec.Seen
 		rssi := rec.Rssi
 
-		// sql := "CALL add_flight ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31);"
-
-		// _, err := db.Exec(sql, hex_code, type_code, flight, alt_baro, alt_geom, gs, track, baro_rate, squawk, emergency, category, lat, lon, nic, rc, seen_pos, r_dst, r_dir, version, nic_baro, nac_p, nac_v, sil, sil_type, gva, sda, alert, spi, messages, seen, rssi)
-		// if err != nil {
-		// 	panic(err.Error())
-		// }
-
 		var sb strings.Builder
 		sb.WriteString("{")
 		sb.WriteString("\"hex_code\": \"" + hex_code + "\", ")
