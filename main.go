@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -14,14 +13,6 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/joho/godotenv"
-)
-
-const (
-	host     = "192.168.86.2"
-	port     = 5432
-	user     = "pi"
-	password = "Boomer2025"
-	dbname   = "adsb"
 )
 
 type Response struct {
@@ -99,22 +90,6 @@ func main() {
 	var apiResult Response
 	if err := json.Unmarshal(body, &apiResult); err != nil { // Parse []byte to the go struct pointer
 		fmt.Println("Can not unmarshal JSON")
-	}
-	//-----------------------------------------------------------------------
-
-	//-----------------------------------------------------------------------
-	//--- Make and open the database connection
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	//--- Are we good?
-	err = db.Ping()
-	if err != nil {
-		panic(err)
 	}
 	//-----------------------------------------------------------------------
 
