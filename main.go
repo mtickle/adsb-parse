@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -80,12 +81,12 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
-	//fxApiKey := os.Getenv("FX_API_KEY")
+	fxApiKey := os.Getenv("FX_API_KEY")
 
 	//-----------------------------------------------------------------------
 	//--- Set the data url
 	fxSourceUrl := os.Getenv("FX_SOURCE_URL")
-	//fxApiUrl := os.Getenv("FX_API_URL")
+	fxApiUrl := os.Getenv("FX_API_URL")
 	//-----------------------------------------------------------------------
 
 	//-----------------------------------------------------------------------
@@ -152,74 +153,74 @@ func main() {
 		seen := rec.Seen
 		rssi := rec.Rssi
 
-		sql := "CALL add_flight ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31);"
+		// sql := "CALL add_flight ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31);"
 
-		_, err := db.Exec(sql, hex_code, type_code, flight, alt_baro, alt_geom, gs, track, baro_rate, squawk, emergency, category, lat, lon, nic, rc, seen_pos, r_dst, r_dir, version, nic_baro, nac_p, nac_v, sil, sil_type, gva, sda, alert, spi, messages, seen, rssi)
-		if err != nil {
-			panic(err.Error())
-		}
+		// _, err := db.Exec(sql, hex_code, type_code, flight, alt_baro, alt_geom, gs, track, baro_rate, squawk, emergency, category, lat, lon, nic, rc, seen_pos, r_dst, r_dir, version, nic_baro, nac_p, nac_v, sil, sil_type, gva, sda, alert, spi, messages, seen, rssi)
+		// if err != nil {
+		// 	panic(err.Error())
+		// }
 
-		// var sb strings.Builder
-		// sb.WriteString("{")
-		// sb.WriteString("\"hex\": \"" + hex + "\", ")
-		// sb.WriteString("\"ttype\": \"" + ttype + "\", ")
-		// sb.WriteString("\"flight\": \"" + flight + "\", ")
-		// sb.WriteString("\"alt_baro\": \"" + fmt.Sprintf("%d", alt_baro) + "\", ")
-		// sb.WriteString("\"alt_geom\": \"" + fmt.Sprintf("%d", alt_geom) + "\", ")
-		// sb.WriteString("\"gs\": \"" + fmt.Sprintf("%g", gs) + "\", ")
-		// sb.WriteString("\"track\": \"" + fmt.Sprintf("%g", track) + "\", ")
-		// sb.WriteString("\"baro_rate\": \"" + fmt.Sprintf("%d", baro_rate) + "\", ")
-		// sb.WriteString("\"squawk\": \"" + squawk + "\", ")
-		// sb.WriteString("\"emergency\": \"" + emergency + "\", ")
-		// sb.WriteString("\"category\": \"" + category + "\", ")
-		// sb.WriteString("\"lat\": \"" + fmt.Sprintf("%g", lat) + "\", ")
-		// sb.WriteString("\"lon\": \"" + fmt.Sprintf("%g", lon) + "\", ")
-		// sb.WriteString("\"nic\": \"" + fmt.Sprintf("%d", nic) + "\", ")
-		// sb.WriteString("\"rc\": \"" + fmt.Sprintf("%d", rc) + "\", ")
-		// sb.WriteString("\"seen_pos\": \"" + fmt.Sprintf("%g", seen_pos) + "\", ")
-		// sb.WriteString("\"r_dst\": \"" + fmt.Sprintf("%g", r_dst) + "\", ")
-		// sb.WriteString("\"r_dir\": \"" + fmt.Sprintf("%g", r_dir) + "\", ")
-		// sb.WriteString("\"version\": \"" + fmt.Sprintf("%d", version) + "\", ")
-		// sb.WriteString("\"nic_baro\": \"" + fmt.Sprintf("%d", nic_baro) + "\", ")
-		// sb.WriteString("\"nac_p\": \"" + fmt.Sprintf("%d", nac_p) + "\", ")
-		// sb.WriteString("\"nac_v\": \"" + fmt.Sprintf("%d", nac_v) + "\", ")
-		// sb.WriteString("\"sil\": \"" + fmt.Sprintf("%d", sil) + "\", ")
-		// sb.WriteString("\"sil_type\": \"" + sil_type + "\", ")
-		// sb.WriteString("\"gva\": \"" + fmt.Sprintf("%d", gva) + "\", ")
-		// sb.WriteString("\"sda\": \"" + fmt.Sprintf("%d", sda) + "\", ")
-		// sb.WriteString("\"alert\": \"" + fmt.Sprintf("%d", alert) + "\", ")
-		// sb.WriteString("\"spi\": \"" + fmt.Sprintf("%d", spi) + "\", ")
+		var sb strings.Builder
+		sb.WriteString("{")
+		sb.WriteString("\"hex_code\": \"" + hex_code + "\", ")
+		sb.WriteString("\"type_code\": \"" + type_code + "\", ")
+		sb.WriteString("\"flight\": \"" + flight + "\", ")
+		sb.WriteString("\"alt_baro\": \"" + fmt.Sprintf("%d", alt_baro) + "\", ")
+		sb.WriteString("\"alt_geom\": \"" + fmt.Sprintf("%d", alt_geom) + "\", ")
+		sb.WriteString("\"gs\": \"" + fmt.Sprintf("%g", gs) + "\", ")
+		sb.WriteString("\"track\": \"" + fmt.Sprintf("%g", track) + "\", ")
+		sb.WriteString("\"baro_rate\": \"" + fmt.Sprintf("%d", baro_rate) + "\", ")
+		sb.WriteString("\"squawk\": \"" + squawk + "\", ")
+		sb.WriteString("\"emergency\": \"" + emergency + "\", ")
+		sb.WriteString("\"category\": \"" + category + "\", ")
+		sb.WriteString("\"lat\": \"" + fmt.Sprintf("%g", lat) + "\", ")
+		sb.WriteString("\"lon\": \"" + fmt.Sprintf("%g", lon) + "\", ")
+		sb.WriteString("\"nic\": \"" + fmt.Sprintf("%d", nic) + "\", ")
+		sb.WriteString("\"rc\": \"" + fmt.Sprintf("%d", rc) + "\", ")
+		sb.WriteString("\"seen_pos\": \"" + fmt.Sprintf("%g", seen_pos) + "\", ")
+		sb.WriteString("\"r_dst\": \"" + fmt.Sprintf("%g", r_dst) + "\", ")
+		sb.WriteString("\"r_dir\": \"" + fmt.Sprintf("%g", r_dir) + "\", ")
+		sb.WriteString("\"version\": \"" + fmt.Sprintf("%d", version) + "\", ")
+		sb.WriteString("\"nic_baro\": \"" + fmt.Sprintf("%d", nic_baro) + "\", ")
+		sb.WriteString("\"nac_p\": \"" + fmt.Sprintf("%d", nac_p) + "\", ")
+		sb.WriteString("\"nac_v\": \"" + fmt.Sprintf("%d", nac_v) + "\", ")
+		sb.WriteString("\"sil\": \"" + fmt.Sprintf("%d", sil) + "\", ")
+		sb.WriteString("\"sil_type\": \"" + sil_type + "\", ")
+		sb.WriteString("\"gva\": \"" + fmt.Sprintf("%d", gva) + "\", ")
+		sb.WriteString("\"sda\": \"" + fmt.Sprintf("%d", sda) + "\", ")
+		sb.WriteString("\"alert\": \"" + fmt.Sprintf("%d", alert) + "\", ")
+		sb.WriteString("\"spi\": \"" + fmt.Sprintf("%d", spi) + "\", ")
 		// sb.WriteString("\"mlat\": \"" + fmt.Sprintf("%g", mlat) + "\", ")
 		// sb.WriteString("\"tisb\": \"" + fmt.Sprintf("%g", tisb) + "\", ")
-		// sb.WriteString("\"messages\": \"" + fmt.Sprintf("%d", messages) + "\", ")
-		// sb.WriteString("\"seen\": \"" + fmt.Sprintf("%g", seen) + "\", ")
-		// sb.WriteString("\"rssi\": \"" + fmt.Sprintf("%g", rssi) + "\"")
-		// sb.WriteString("}")
+		sb.WriteString("\"messages\": \"" + fmt.Sprintf("%d", messages) + "\", ")
+		sb.WriteString("\"seen\": \"" + fmt.Sprintf("%g", seen) + "\", ")
+		sb.WriteString("\"rssi\": \"" + fmt.Sprintf("%g", rssi) + "\"")
+		sb.WriteString("}")
 
-		// //--- Just hold this here
-		// temp := sb.String()
-		// jsonBody := []byte(temp)
-		// apiPayload := bytes.NewReader(jsonBody)
+		//--- Just hold this here
+		temp := sb.String()
+		jsonBody := []byte(temp)
+		apiPayload := bytes.NewReader(jsonBody)
 
-		// fmt.Println(temp)
+		//fmt.Println(temp)
 
-		// //--- Send the request downrange to the API URL
-		// req, err := http.NewRequest(http.MethodPost, fxApiUrl, apiPayload)
-		// if err != nil {
-		// 	panic(err)
-		// }
-		// req.Header.Set("Content-Type", "application/json; charset=UTF-8")
-		// req.Header.Set("x-api-key", fxApiKey)
+		//--- Send the request downrange to the API URL
+		req, err := http.NewRequest(http.MethodPost, fxApiUrl, apiPayload)
+		if err != nil {
+			panic(err)
+		}
+		req.Header.Set("Content-Type", "application/json; charset=UTF-8")
+		req.Header.Set("x-api-key", fxApiKey)
 
-		// client := &http.Client{}
-		// response, error := client.Do(req)
-		// //fmt.Println(response)
-		// if error != nil {
-		// 	panic(error)
-		// }
-		// defer response.Body.Close()
+		client := &http.Client{}
+		response, error := client.Do(req)
+		//fmt.Println(response)
+		if error != nil {
+			panic(error)
+		}
+		defer response.Body.Close()
 
-		// //--- Logging
-		// fmt.Println("\"hex\": \""+hex+"\" -  API response:", response.Status)
+		//--- Logging
+		fmt.Println("\"hex\": \""+hex_code+"\" -  API response:", response.Status)
 	}
 }
