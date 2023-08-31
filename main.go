@@ -170,7 +170,7 @@ func main() {
 		jsonBody := []byte(temp)
 		apiPayload := bytes.NewReader(jsonBody)
 
-		fmt.Println(temp)
+		//fmt.Println(temp)
 
 		//--- Send the request downrange to the API URL
 		req, err := http.NewRequest(http.MethodPost, fxApiUrl, apiPayload)
