@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	_ "github.com/lib/pq"
 
@@ -96,9 +97,12 @@ func main() {
 	//-----------------------------------------------------------------------
 	//--- Start iterating through the records
 	for _, rec := range apiResult.Aircraft {
+		now := time.Now()
+		flight_date := now.Format("2006-01-02")
+		flight_time := now.Format("15:04:05")
 		hex_code := strings.ToUpper(strings.TrimSpace(rec.Hex))
 		type_code := strings.TrimSpace(rec.Type)
-		flight := strings.TrimSpace(rec.Flight)
+		flight_code := strings.TrimSpace(rec.Flight)
 		alt_baro := rec.AltBaro
 		alt_geom := rec.AltGeom
 		gs := rec.Gs
@@ -130,9 +134,11 @@ func main() {
 
 		var sb strings.Builder
 		sb.WriteString("{")
+		sb.WriteString("\"flight_date\": \"" + flight_date + "\", ")
+		sb.WriteString("\"flight_time\": \"" + flight_time + "\", ")
 		sb.WriteString("\"hex_code\": \"" + hex_code + "\", ")
 		sb.WriteString("\"type_code\": \"" + type_code + "\", ")
-		sb.WriteString("\"flight\": \"" + flight + "\", ")
+		sb.WriteString("\"flight_code\": \"" + flight_code + "\", ")
 		sb.WriteString("\"alt_baro\": \"" + fmt.Sprintf("%d", alt_baro) + "\", ")
 		sb.WriteString("\"alt_geom\": \"" + fmt.Sprintf("%d", alt_geom) + "\", ")
 		sb.WriteString("\"gs\": \"" + fmt.Sprintf("%g", gs) + "\", ")
@@ -170,7 +176,7 @@ func main() {
 		jsonBody := []byte(temp)
 		apiPayload := bytes.NewReader(jsonBody)
 
-		//fmt.Println(temp)
+		fmt.Println(temp)
 
 		//--- Send the request downrange to the API URL
 		req, err := http.NewRequest(http.MethodPost, fxApiUrl, apiPayload)
