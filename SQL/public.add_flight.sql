@@ -1,113 +1,43 @@
--- PROCEDURE: public.add_flight(text, text, text, bigint, bigint, text, text, bigint, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text)
+-- PROCEDURE: public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying)
 
--- DROP PROCEDURE IF EXISTS public.add_flight(text, text, text, bigint, bigint, text, text, bigint, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text);
+-- DROP PROCEDURE IF EXISTS public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying);
 
 CREATE OR REPLACE PROCEDURE public.add_flight(
-	_hex_code text,
-	_type_code text,
-	_flight text,
+	_hex_code character varying,
+	_type_code character varying,
+	_flight_code character varying,
+	_flight_time timestamp with time zone,
 	_alt_baro bigint,
-	_alt_geom bigint,
-	_gs text,
-	_track text,
-	_baro_rate bigint,
-	_squawk text,
-	_emergency text,
-	_category text,
-	_lat text,
-	_lon text,
-	_nic text,
-	_rc text,
-	_seen_pos text,
-	_r_dst text,
-	_r_dir text,
-	_version text,
-	_nic_baro text,
-	_nac_p text,
-	_nac_v text,
-	_sil text,
-	_sil_type text,
-	_gva text,
-	_sda text,
-	_alert text,
-	_spi text,
-	_mlat text,
-	_tisb text,
-	_messages text,
-	_seen text,
-	_rssi text)
+	_category character varying,
+	_lat character varying,
+	_lon character varying)
 LANGUAGE 'sql'
 AS $BODY$
-INSERT INTO public.flight (
-        hex_code,
-        type_code,
-        flight,
-        alt_baro,
-        alt_geom,
-        gs,
-        track,
-        baro_rate,
-        squawk,
-        emergency,
-        category,
-        lat,
-        lon,
-        nic,
-        rc,
-        seen_pos,
-        r_dst,
-        r_dir,
-        version,
-        nic_baro,
-        nac_p,
-        nac_v,
-        sil,
-        sil_type,
-        gva,
-        sda,
-        alert,
-        spi,
-        mlat,
-        tisb,
-        messages,
-        seen,
-        rssi
-	 )  VALUES (
-         _hex_code,
+INSERT INTO
+  public.flight (
+    hex_code,
+    type_code,
+    flight_code,
+    flight_time,
+	alt_baro,
+    category,
+    lat,
+    lon
+  )
+VALUES
+  (
+    _hex_code,
     _type_code,
-    _flight,
-  _alt_baro,
-    _alt_geom,
-    _gs,
-    _track,
-    _baro_rate,
-    _squawk,
-    _emergency,
+    _flight_code,
+    _flight_time,
+    _alt_baro,
     _category,
     _lat,
-    _lon,
-    _nic,
-    _rc,
-    _seen_pos,
-    _r_dst,
-    _r_dir,
-    _version,
-    _nic_baro,
-    _nac_p,
-    _nac_v,
-    _sil,
-    _sil_type,
-    _gva,
-    _sda,
-    _alert,
-    _spi,
-    _mlat,
-    _tisb,
-    _messages,
-    _seen,
-    _rssi
-        )
+    _lon
+    
+  ) 
+  ON CONFLICT (hex_code, lat, lon) DO NOTHING;
 $BODY$;
 
-ALTER PROCEDURE public.add_flight(text, text, text, bigint, bigint, text, text, bigint, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text)
+ALTER PROCEDURE public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying)
     OWNER TO pi;
