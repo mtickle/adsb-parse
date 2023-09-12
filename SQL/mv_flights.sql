@@ -2,11 +2,11 @@
 
 -- DROP MATERIALIZED VIEW IF EXISTS public.mv_flight;
 
-CREATE MATERIALIZED VIEW IF NOT EXISTS public.mv_flight
+CREATE MATERIALIZED VIEW IF NOT EXISTS public.mv_all_flight
 TABLESPACE pg_default
 AS
  SELECT flight.hex_code,
-    flight.flight,
+    flight.flight_code,
     flight.flight_time,
     master.name,
     reference.mfr,
