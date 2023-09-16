@@ -1,6 +1,6 @@
 -- PROCEDURE: public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying)
 
--- DROP PROCEDURE IF EXISTS public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying);
+-- DROP PROCEDURE IF EXISTS public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying, , character varying);
 
 CREATE OR REPLACE PROCEDURE public.add_flight(
 	_hex_code character varying,
@@ -10,7 +10,8 @@ CREATE OR REPLACE PROCEDURE public.add_flight(
 	_alt_baro bigint,
 	_category character varying,
 	_lat character varying,
-	_lon character varying)
+	_lon character varying,
+	_squawk  character varying)
 LANGUAGE 'sql'
 AS $BODY$
 INSERT INTO
@@ -22,7 +23,8 @@ INSERT INTO
 	alt_baro,
     category,
     lat,
-    lon
+    lon,
+	squawk
   )
 VALUES
   (
@@ -33,11 +35,11 @@ VALUES
     _alt_baro,
     _category,
     _lat,
-    _lon
+    _lon,
+	 _squawk
     
   ) 
-  ON CONFLICT (hex_code, lat, lon) DO NOTHING;
 $BODY$;
 
-ALTER PROCEDURE public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying)
+ALTER PROCEDURE public.add_flight(character varying, character varying, character varying, timestamp with time zone, bigint, character varying, character varying, character varying, character varying)
     OWNER TO pi;

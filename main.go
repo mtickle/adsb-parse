@@ -118,10 +118,11 @@ func main() {
 		category := strings.TrimSpace(rec.Category)
 		lat := rec.Lat
 		lon := rec.Lon
+		squawk := rec.Squawk
 
-		sql := "CALL add_flight ($1, $2, $3, $4, $5, $6, $7, $8);"
+		sql := "CALL add_flight ($1, $2, $3, $4, $5, $6, $7, $8, $9);"
 
-		_, err := db.Exec(sql, hex_code, type_code, flight_code, flight_time, alt_baro, category, lat, lon)
+		_, err := db.Exec(sql, hex_code, type_code, flight_code, flight_time, alt_baro, category, lat, lon, squawk)
 
 		if err != nil {
 			panic(err)
