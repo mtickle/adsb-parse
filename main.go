@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	_ "github.com/lib/pq"
 
@@ -96,6 +97,8 @@ func main() {
 	//-----------------------------------------------------------------------
 	//--- Start iterating through the records
 	for _, rec := range apiResult.Aircraft {
+		//now := time.Now()
+		flight_time := time.Now().Format(time.DateTime)
 		hex_code := strings.ToUpper(strings.TrimSpace(rec.Hex))
 		type_code := strings.TrimSpace(rec.Type)
 		flight := strings.TrimSpace(rec.Flight)
@@ -130,6 +133,7 @@ func main() {
 
 		var sb strings.Builder
 		sb.WriteString("{")
+		sb.WriteString("\"flight_time\": \"" + flight_time + "\", ")
 		sb.WriteString("\"hex_code\": \"" + hex_code + "\", ")
 		sb.WriteString("\"type_code\": \"" + type_code + "\", ")
 		sb.WriteString("\"flight\": \"" + flight + "\", ")
